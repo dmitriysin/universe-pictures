@@ -22,8 +22,9 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
     testImplementation 'junit:junit:4.12'
@@ -37,12 +38,11 @@ dependencies {
 
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt 'com.google.dagger:dagger-android-processor:2.15'
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation "com.squareup.retrofit2:retrofit:2.6.2"
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.code.gson:gson:2.8.6'
-
 
 }

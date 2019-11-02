@@ -30,5 +30,5 @@ task clean(type: Delete) {
 
 project.ext {
     lifecycle_version = "2.1.0"
-    dagger_version = "2.23.2"
+    dagger_version = "2.15"
 }
