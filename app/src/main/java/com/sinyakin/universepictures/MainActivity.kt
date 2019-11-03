@@ -3,31 +3,37 @@ package com.sinyakin.universepictures
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.sinyakin.universepictures.network.ApodApi
+import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
+    @Inject
+    lateinit var apodApi: ApodApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.main_activity)
 
-        val retrofit = Retrofit.Builder().baseUrl("https://api.nasa.gov/planetary/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
+        App.instance.daggerApplicationComponent.inject(this)
 
-        launch {
-            val picture = retrofit.create(ApodApi::class.java).getPictureOfTheDay("2019-10-10")
-            Log.e("pictures", picture.toString())
+        recyclerView.layoutManager =GridLayoutManager(this,2)
 
-            val pictures = retrofit.create(ApodApi::class.java).getPicturesRange("2019-10-10")
-            Log.e("pictures", pictures.toString())
-        }
+        val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
+        viewModel.adapter.observe(this, Observer {
+            recyclerView.adapter = it
+        })
+        viewModel.loadPictures()
 
     }
 }
