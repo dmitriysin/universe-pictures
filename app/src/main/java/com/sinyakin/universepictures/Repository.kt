@@ -1,7 +1,6 @@
 package com.sinyakin.universepictures
 
 import com.sinyakin.universepictures.network.ApodApi
-import com.squareup.picasso.Picasso
 import javax.inject.Inject
 import javax.inject.Singleton
 

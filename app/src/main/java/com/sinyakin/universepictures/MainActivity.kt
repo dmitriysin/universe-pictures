@@ -29,5 +29,9 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = it
         })
         viewModel.loadPictures()
+        viewModel.clickPicture.observe(this, Observer {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, PictureDetailFragment.newInstance(it)).commit()
+        })
     }
 }

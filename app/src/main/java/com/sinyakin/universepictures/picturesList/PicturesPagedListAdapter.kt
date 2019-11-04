@@ -16,6 +16,8 @@ class PicturesPagedListAdapter @Inject constructor(
     private val picasso: Picasso
 ) : PagedListAdapter<PictureData, PictureViewHolder>(diffUtilCallback) {
 
+    var onItemClickListener:(pic:PictureData)->Unit={}
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder =
         PictureViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -27,7 +29,7 @@ class PicturesPagedListAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
         getItem(position)?.let {
-            holder.bind(it, picasso)
+            holder.bind(it, picasso,onItemClickListener)
         }
     }
 }

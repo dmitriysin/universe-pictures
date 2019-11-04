@@ -15,6 +15,7 @@ class PicturesViewModel : ViewModel() {
     @Inject lateinit var pagedList: PagedList
 
     val adapter: MutableLiveData<PicturesPagedListAdapter> = MutableLiveData()
+    val clickPicture: MutableLiveData<PictureData> = MutableLiveData()
 
     init {
         DaggerPicturesViewModelComponent.builder()
@@ -23,6 +24,11 @@ class PicturesViewModel : ViewModel() {
     }
 
     fun loadPictures() {
-        adapter.value = picturesPagedListAdapter.apply { submitList(pagedList.getList()) }
+        adapter.value = picturesPagedListAdapter.apply {
+            submitList(pagedList.getList())
+            onItemClickListener={
+                clickPicture.value=it
+            }
+        }
     }
 }

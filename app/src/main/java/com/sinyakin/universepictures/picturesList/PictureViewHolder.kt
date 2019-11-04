@@ -8,7 +8,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.picture_list_item.view.*
 
 class PictureViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(picture: PictureData, picasso: Picasso) {
+    fun bind(picture: PictureData, picasso: Picasso,onClickListener:(PictureData)->Unit) {
         picasso.load(picture.url).into(itemView.imageView)
+        itemView.setOnClickListener { onClickListener(picture) }
     }
 }

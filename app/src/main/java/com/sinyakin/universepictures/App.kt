@@ -16,7 +16,7 @@ class App : Application() {
             applicationModule(ApplicationModule(this)).
             build()
     }
-    
+
     companion object {
         lateinit var instance: App
     }
