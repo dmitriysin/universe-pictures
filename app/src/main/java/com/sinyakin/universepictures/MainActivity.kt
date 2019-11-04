@@ -16,24 +16,18 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-
-    @Inject
-    lateinit var apodApi: ApodApi
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        App.instance.daggerApplicationComponent.inject(this)
-
-        recyclerView.layoutManager =GridLayoutManager(this,2)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
         viewModel.adapter.observe(this, Observer {
             recyclerView.adapter = it
         })
         viewModel.loadPictures()
-
     }
 }

@@ -11,11 +11,8 @@ import javax.inject.Inject
 
 class PicturesViewModel : ViewModel() {
 
-    @Inject
-    lateinit var picturesPagedListAdapter: PicturesPagedListAdapter
-
-    @Inject
-    lateinit var pagedList: PagedList
+    @Inject lateinit var picturesPagedListAdapter: PicturesPagedListAdapter
+    @Inject lateinit var pagedList: PagedList
 
     val adapter: MutableLiveData<PicturesPagedListAdapter> = MutableLiveData()
 
@@ -26,9 +23,6 @@ class PicturesViewModel : ViewModel() {
     }
 
     fun loadPictures() {
-        val picturesList = pagedList.getList()
-        picturesPagedListAdapter.submitList(picturesList)
-        adapter.value = picturesPagedListAdapter
+        adapter.value = picturesPagedListAdapter.apply { submitList(pagedList.getList()) }
     }
-
 }

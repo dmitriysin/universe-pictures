@@ -25,7 +25,7 @@ class ApplicationModule(private val application: Application) {
     @Provides
     @Singleton
     fun getPicasso(): Picasso =
-        Picasso.Builder(getApplicationContext()).downloader(getOkHttpDownloader()).build()
+        Picasso.Builder(getApplicationContext()).build()
 
     @Provides
     @Singleton

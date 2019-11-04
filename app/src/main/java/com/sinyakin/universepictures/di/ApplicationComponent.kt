@@ -10,7 +10,6 @@ import javax.inject.Singleton
 @Component(modules = [ApplicationModule::class])
 @Singleton
 interface ApplicationComponent {
-    fun inject(mainActivity: MainActivity)
     fun getPicasso(): Picasso
     fun getApi(): ApodApi
     fun getRepository():Repository
