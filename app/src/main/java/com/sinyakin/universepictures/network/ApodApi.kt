@@ -9,14 +9,19 @@ interface ApodApi {
     @GET(ENDPOINT)
     suspend fun getPictureOfTheDay(@Query("date") date: String): PictureData
 
+    /**
+     * start_date<end_date
+     */
     @GET(ENDPOINT)
-    suspend fun getPicturesRange(
+    suspend fun getMediaData(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String? = null
-    ): ArrayList<PictureData>
+    ): List<PictureData>
 
     companion object {
         private const val API_KEY = "G7IZxpaKg1KdR21XFt06udX9c8A99dbcAIArco6I"
         const val ENDPOINT = "apod?api_key=$API_KEY"
+
+        const val FULL_ADDRESS="https://api.nasa.gov/planetary/apod?api_key=G7IZxpaKg1KdR21XFt06udX9c8A99dbcAIArco6I"
     }
 }

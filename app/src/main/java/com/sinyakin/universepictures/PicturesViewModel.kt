@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.sinyakin.universepictures.di.DaggerPicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelModule
 import com.sinyakin.universepictures.picturesList.PagedList
-import com.sinyakin.universepictures.picturesList.PicturesDataSource
 import com.sinyakin.universepictures.picturesList.PicturesPagedListAdapter
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PicturesViewModel : ViewModel() {
@@ -22,15 +20,14 @@ class PicturesViewModel : ViewModel() {
     val adapter: MutableLiveData<PicturesPagedListAdapter> = MutableLiveData()
 
     init {
-        val x = DaggerPicturesViewModelComponent.builder()
+        DaggerPicturesViewModelComponent.builder()
             .picturesViewModelModule(PicturesViewModelModule(viewModelScope))
-            .applicationComponent(App.instance.daggerApplicationComponent).build()
-        x.inject(this)
+            .applicationComponent(App.instance.daggerApplicationComponent).build().inject(this)
     }
 
     fun loadPictures() {
-        val p = pagedList.getList()
-        picturesPagedListAdapter.submitList(p)
+        val picturesList = pagedList.getList()
+        picturesPagedListAdapter.submitList(picturesList)
         adapter.value = picturesPagedListAdapter
     }
 

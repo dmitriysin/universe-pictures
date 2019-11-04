@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
-    android:elevation="1dp"
-    android:background="@color/colorBlack">
+    android:elevation="1dp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:scaleType="fitXY">
+        android:scaleType="fitXY"
+        android:background="@color/colorBlack">
     </ImageView>
 
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,7 @@
 package com.sinyakin.universepictures.di
 
 import com.sinyakin.universepictures.MainActivity
+import com.sinyakin.universepictures.Repository
 import com.sinyakin.universepictures.network.ApodApi
 import com.squareup.picasso.Picasso
 import dagger.Component
@@ -12,4 +13,5 @@ interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
     fun getPicasso(): Picasso
     fun getApi(): ApodApi
+    fun getRepository():Repository
 }

@@ -17,13 +17,17 @@ class PagedList @Inject constructor(private val picturesDataSource: PicturesData
     ).setFetchExecutor(Executors.newSingleThreadExecutor()).setNotifyExecutor(MainThreadExecutor()).build()
 
     private val config =
-        PagedList.Config.Builder().setPageSize(10).setEnablePlaceholders(false).build()
+        PagedList.Config.Builder().setPageSize(PAGE_SIZE).setEnablePlaceholders(false).build()
 
-    internal inner class MainThreadExecutor : Executor {
+    class MainThreadExecutor : Executor {
         private val mHandler = Handler(Looper.getMainLooper())
 
         override fun execute(command: Runnable) {
             mHandler.post(command)
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 20
     }
 }
