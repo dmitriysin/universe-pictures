@@ -25,13 +25,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
-        viewModel.adapter.observe(this, Observer {
-            recyclerView.adapter = it
+        viewModel.adapter.observe(this, Observer { picturesPagedListAdapter ->
+            recyclerView.adapter = picturesPagedListAdapter
         })
         viewModel.loadPictures()
-        viewModel.clickPicture.observe(this, Observer {
+        viewModel.clickPicture.observe(this, Observer { pictureData ->
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, PictureDetailFragment.newInstance(it)).commit()
+                .replace(R.id.fragmentContainer, PictureDetailFragment.newInstance(pictureData))
+                .addToBackStack(null)
+                .commit()
         })
     }
 }
