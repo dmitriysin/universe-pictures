@@ -1,22 +1,14 @@
 package com.sinyakin.universepictures
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.sinyakin.universepictures.network.ApodApi
+import com.sinyakin.universepictures.baseui.BaseActivity
+import com.sinyakin.universepictures.extensions.observe
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,15 +17,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
-        viewModel.adapter.observe(this, Observer { picturesPagedListAdapter ->
-            recyclerView.adapter = picturesPagedListAdapter
-        })
+
+        observe(viewModel.adapter) {
+            recyclerView.adapter = it
+        }
+
         viewModel.loadPictures()
-        viewModel.clickPicture.observe(this, Observer { pictureData ->
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, PictureDetailFragment.newInstance(pictureData))
-                .addToBackStack(null)
-                .commit()
-        })
+
+        observe(viewModel.clickPicture) {
+            addFragment(PictureDetailFragment.newInstance(it))
+        }
     }
 }
