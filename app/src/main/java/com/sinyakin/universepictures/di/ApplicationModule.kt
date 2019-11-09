@@ -3,6 +3,8 @@ package com.sinyakin.universepictures.di
 import android.app.Application
 import android.content.Context
 import com.sinyakin.universepictures.network.ApodApi
+import com.sinyakin.universepictures.repository.NetworkRepository
+import com.sinyakin.universepictures.repository.Repository
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import dagger.Module
@@ -31,18 +33,23 @@ class ApplicationModule(private val application: Application) {
     @Singleton
     fun getApplicationContext(): Context = application.applicationContext
 
+
+    @Provides
+    @Singleton
+    fun getRepository(dataSource: NetworkRepository): Repository = dataSource
+
     private fun getRetrofit(): Retrofit = Retrofit.Builder().baseUrl(APOD_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create()).build()
 
     private fun getOkHttpDownloader(): OkHttp3Downloader {
 
-        val ok=OkHttpClient.Builder().apply {
-            connectTimeout(30,TimeUnit.SECONDS)
-            readTimeout(30,TimeUnit.SECONDS)
+        val ok = OkHttpClient.Builder().apply {
+            connectTimeout(30, TimeUnit.SECONDS)
+            readTimeout(30, TimeUnit.SECONDS)
         }
         val cacheSize = 100_000_000L //100 Mb
 
-        ok.cache(Cache(File(getApplicationContext().cacheDir,"file"),cacheSize))
+        ok.cache(Cache(File(getApplicationContext().cacheDir, "file"), cacheSize))
         return OkHttp3Downloader(ok.build())
     }
 

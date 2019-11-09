@@ -1,10 +1,9 @@
 package com.sinyakin.universepictures.picturesList
 
-import android.util.Log
 import androidx.paging.PositionalDataSource
 import com.sinyakin.universepictures.DateManager
 import com.sinyakin.universepictures.PictureData
-import com.sinyakin.universepictures.Repository
+import com.sinyakin.universepictures.repository.Repository
 import com.sinyakin.universepictures.di.PicturesViewModelScope
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
