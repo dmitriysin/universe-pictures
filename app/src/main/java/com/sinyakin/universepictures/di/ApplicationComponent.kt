@@ -1,5 +1,6 @@
 package com.sinyakin.universepictures.di
 
+import com.sinyakin.universepictures.PictureDetailFragment
 import com.sinyakin.universepictures.repository.Repository
 import com.sinyakin.universepictures.network.ApodApi
 import com.squareup.picasso.Picasso
@@ -12,4 +13,5 @@ interface ApplicationComponent {
     fun getPicasso(): Picasso
     fun getApi(): ApodApi
     fun getRepository(): Repository
+    fun inject(pictureDetailFragment: PictureDetailFragment)
 }
