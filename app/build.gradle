@@ -22,14 +22,6 @@ android {
     }
 }
 
-apply plugin: 'org.jetbrains.kotlin.android.extensions'
-
-android {
-    androidExtensions {
-        experimental = true
-    }
-}
-
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

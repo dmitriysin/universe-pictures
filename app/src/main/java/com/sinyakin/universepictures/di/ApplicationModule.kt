@@ -27,7 +27,7 @@ class ApplicationModule(private val application: Application) {
     @Provides
     @Singleton
     fun getPicasso(): Picasso =
-        Picasso.Builder(getApplicationContext()).build()
+        Picasso.Builder(getApplicationContext()).downloader(getOkHttpDownloader()).build()
 
     @Provides
     @Singleton
@@ -47,7 +47,7 @@ class ApplicationModule(private val application: Application) {
             connectTimeout(30, TimeUnit.SECONDS)
             readTimeout(30, TimeUnit.SECONDS)
         }
-        val cacheSize = 100_000_000L //100 Mb
+        val cacheSize = 500_000_000L //500 Mb
 
         ok.cache(Cache(File(getApplicationContext().cacheDir, "file"), cacheSize))
         return OkHttp3Downloader(ok.build())

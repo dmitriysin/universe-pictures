@@ -1,9 +1,5 @@
 package com.sinyakin.universepictures
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-@Parcelize
 data class PictureData(
     val date: String,
     val explanation: String,
@@ -12,4 +8,4 @@ data class PictureData(
     val service_version: String,
     val title: String,
     val url: String
-) : Parcelable
+)

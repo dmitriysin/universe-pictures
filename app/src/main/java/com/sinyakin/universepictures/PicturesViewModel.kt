@@ -1,9 +1,11 @@
 package com.sinyakin.universepictures
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sinyakin.universepictures.di.DaggerPicturesViewModelComponent
+import com.sinyakin.universepictures.di.PicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelModule
 import com.sinyakin.universepictures.picturesList.PagedList
 import com.sinyakin.universepictures.picturesList.PicturesPagedListAdapter
@@ -16,13 +18,13 @@ class PicturesViewModel : ViewModel() {
     @Inject
     lateinit var pagedList: PagedList
 
-    val adapter: MutableLiveData<PicturesPagedListAdapter> = MutableLiveData()
-    val clickPicture: MutableLiveData<PictureData> = MutableLiveData()
+    val adapter = MutableLiveData<PicturesPagedListAdapter>()
+    val clickPicture = MutableLiveData<PictureData>()
+    private var viewModelComponent: PicturesViewModelComponent?
 
     init {
-        DaggerPicturesViewModelComponent.builder()
-            .picturesViewModelModule(PicturesViewModelModule(viewModelScope))
-            .applicationComponent(App.instance.daggerApplicationComponent).build().inject(this)
+        viewModelComponent = getPictureViewModelComponent()
+        viewModelComponent?.inject(this)
     }
 
     fun loadPictures() {
@@ -32,5 +34,14 @@ class PicturesViewModel : ViewModel() {
                 clickPicture.value = it
             }
         }
+    }
+
+    private fun getPictureViewModelComponent() = DaggerPicturesViewModelComponent.builder()
+        .picturesViewModelModule(PicturesViewModelModule(viewModelScope))
+        .applicationComponent(App.instance.daggerApplicationComponent).build()
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelComponent = null
     }
 }

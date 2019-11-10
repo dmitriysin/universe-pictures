@@ -14,8 +14,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
 
         observe(viewModel.adapter) {
@@ -25,7 +23,7 @@ class MainActivity : BaseActivity() {
         viewModel.loadPictures()
 
         observe(viewModel.clickPicture) {
-            addFragment(PictureDetailFragment.newInstance(it))
+            addFragment(PictureDetailFragment())
         }
     }
 }
