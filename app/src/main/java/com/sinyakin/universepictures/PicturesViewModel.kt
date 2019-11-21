@@ -1,14 +1,12 @@
 package com.sinyakin.universepictures
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sinyakin.universepictures.di.DaggerPicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelModule
 import com.sinyakin.universepictures.picturesList.PagedList
 import com.sinyakin.universepictures.picturesList.PicturesPagedListAdapter
+import com.sinyakin.universepictures.repository.Repository
 import javax.inject.Inject
 
 class PicturesViewModel : ViewModel() {
@@ -17,14 +15,25 @@ class PicturesViewModel : ViewModel() {
     lateinit var picturesPagedListAdapter: PicturesPagedListAdapter
     @Inject
     lateinit var pagedList: PagedList
+    @Inject
+    lateinit var repository: Repository
 
     val adapter = MutableLiveData<PicturesPagedListAdapter>()
     val clickPicture = MutableLiveData<PictureData>()
     private var viewModelComponent: PicturesViewModelComponent?
+    private val exceptionLiveData: LiveData<Exception>
+    private var exceptionObserver: Observer<Exception>
+    val errors = MutableLiveData<Exception>()
 
     init {
         viewModelComponent = getPictureViewModelComponent()
         viewModelComponent?.inject(this)
+        exceptionObserver = Observer {
+            errors.value = it
+        }
+        exceptionLiveData = repository.getErrorStream()
+        exceptionLiveData.observeForever(exceptionObserver)
+
     }
 
     fun loadPictures() {
@@ -43,5 +52,6 @@ class PicturesViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelComponent = null
+        exceptionLiveData.removeObserver(exceptionObserver)
     }
 }

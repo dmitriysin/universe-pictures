@@ -1,6 +1,7 @@
 package com.sinyakin.universepictures
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +25,9 @@ class MainActivity : BaseActivity() {
 
         observe(viewModel.clickPicture) {
             addFragment(PictureDetailFragment())
+        }
+        observe(viewModel.errors) {
+            Toast.makeText(this,"Exception",Toast.LENGTH_SHORT).show()
         }
     }
 }

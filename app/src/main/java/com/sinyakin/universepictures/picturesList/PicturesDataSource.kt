@@ -25,29 +25,36 @@ class PicturesDataSource @Inject constructor(
     ) {
         viewModelCoroutineScope.launch {
             val pictures = loadPictures(params.pageSize)
-            callback.onResult(pictures, START_FROM_FIRST_POSITION)
+            pictures?.let {
+                callback.onResult(pictures, START_FROM_FIRST_POSITION)
+            }
         }
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<PictureData>) {
         viewModelCoroutineScope.launch {
             val pictures = loadPictures(params.loadSize)
-            callback.onResult(pictures)
+            pictures?.let {
+                callback.onResult(pictures)
+            }
         }
     }
 
-    private suspend fun loadPictures(loadSize: Int): List<PictureData> =
+    private suspend fun loadPictures(loadSize: Int): List<PictureData>? =
         withContext(Dispatchers.IO) {
             val startDate = dateManager.addDaysToDate(endDate, -loadSize)
             val pictures = repository.getPictures(startDate, endDate)
             viewModelCoroutineScope.launch { cachePictures(pictures) }
-            val lastLoadedDate = pictures[pictures.lastIndex].date
-            endDate = dateManager.addDaysToDate(lastLoadedDate, -1)
+            pictures?.let {
+                val lastLoadedDate = pictures[pictures.lastIndex].date
+                endDate = dateManager.addDaysToDate(lastLoadedDate, -1)
+            }
+
             return@withContext pictures
         }
 
-    private fun cachePictures(pictures: List<PictureData>) {
-        pictures.forEach {
+    private fun cachePictures(pictures: List<PictureData>?) {
+        pictures?.forEach {
             picasso.load(it.url).fetch()
         }
     }
