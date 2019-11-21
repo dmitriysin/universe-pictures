@@ -18,6 +18,7 @@ class PicturesDataSource @Inject constructor(
 ) : PositionalDataSource<PictureData>() {
 
     private var endDate = dateManager.getCurrentDate()
+    private lateinit var loadParams: LoadParams
 
     override fun loadInitial(
         params: LoadInitialParams,
@@ -29,6 +30,7 @@ class PicturesDataSource @Inject constructor(
                 callback.onResult(pictures, START_FROM_FIRST_POSITION)
             }
         }
+        loadParams = LoadParams.Initial(params, callback)
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<PictureData>) {
@@ -38,7 +40,9 @@ class PicturesDataSource @Inject constructor(
                 callback.onResult(pictures)
             }
         }
+        loadParams = LoadParams.Range(params, callback)
     }
+
 
     private suspend fun loadPictures(loadSize: Int): List<PictureData>? =
         withContext(Dispatchers.IO) {
@@ -49,7 +53,6 @@ class PicturesDataSource @Inject constructor(
                 val lastLoadedDate = pictures[pictures.lastIndex].date
                 endDate = dateManager.addDaysToDate(lastLoadedDate, -1)
             }
-
             return@withContext pictures
         }
 
@@ -59,7 +62,19 @@ class PicturesDataSource @Inject constructor(
         }
     }
 
+    fun retryLoadPictures() {
+        when (loadParams) {
+            is LoadParams.Initial -> with(loadParams as LoadParams.Initial) {
+                loadInitial(initialParams, initialCallback)
+            }
+            is LoadParams.Range -> with(loadParams as LoadParams.Range) {
+                loadRange(params, callback)
+            }
+        }
+    }
+
     companion object {
         const val START_FROM_FIRST_POSITION = 0
     }
+
 }

@@ -43,6 +43,5 @@ class PictureDetailFragment : BaseFragment() {
 
             }
         })
-
     }
 }

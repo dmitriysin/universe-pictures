@@ -4,7 +4,9 @@ import androidx.lifecycle.*
 import com.sinyakin.universepictures.di.DaggerPicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelComponent
 import com.sinyakin.universepictures.di.PicturesViewModelModule
+import com.sinyakin.universepictures.network.ServerError
 import com.sinyakin.universepictures.picturesList.PagedList
+import com.sinyakin.universepictures.picturesList.PicturesDataSource
 import com.sinyakin.universepictures.picturesList.PicturesPagedListAdapter
 import com.sinyakin.universepictures.repository.Repository
 import javax.inject.Inject
@@ -15,6 +17,8 @@ class PicturesViewModel : ViewModel() {
     lateinit var picturesPagedListAdapter: PicturesPagedListAdapter
     @Inject
     lateinit var pagedList: PagedList
+    @Inject
+    lateinit var picturesDataSource: PicturesDataSource
     @Inject
     lateinit var repository: Repository
 
@@ -28,15 +32,18 @@ class PicturesViewModel : ViewModel() {
     init {
         viewModelComponent = getPictureViewModelComponent()
         viewModelComponent?.inject(this)
-        exceptionObserver = Observer {
-            errors.value = it
+        loadPictures()
+        exceptionObserver = Observer { exception ->
+            when (exception) {
+                is ServerError -> errors.value = exception
+            }
         }
         exceptionLiveData = repository.getErrorStream()
         exceptionLiveData.observeForever(exceptionObserver)
 
     }
 
-    fun loadPictures() {
+    private fun loadPictures() {
         adapter.value = picturesPagedListAdapter.apply {
             submitList(pagedList.getList())
             onItemClickListener = {
@@ -53,5 +60,9 @@ class PicturesViewModel : ViewModel() {
         super.onCleared()
         viewModelComponent = null
         exceptionLiveData.removeObserver(exceptionObserver)
+    }
+
+    fun retry() {
+        picturesDataSource.retryLoadPictures()
     }
 }

@@ -7,5 +7,4 @@ import com.sinyakin.universepictures.PictureData
 interface Repository {
     suspend fun getPictures(starDate: String, endDate: String): List<PictureData>?
     fun getErrorStream(): MutableLiveData<Exception>
-
 }
