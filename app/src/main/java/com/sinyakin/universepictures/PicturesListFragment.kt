@@ -5,20 +5,22 @@ import android.view.View
 import com.sinyakin.universepictures.baseui.BaseFragment
 import com.sinyakin.universepictures.extensions.observe
 import com.sinyakin.universepictures.network.ServerError
-import com.sinyakin.universepictures.picturesList.PicturesPagedListAdapter
 import kotlinx.android.synthetic.main.main_activity.*
 
-class PicturesListFragment :BaseFragment() {
-    override fun layoutId()=R.layout.main_activity
+class PicturesListFragment : BaseFragment() {
+    override fun layoutId() = R.layout.main_activity
 
-    lateinit var viewModel:PicturesViewModel
-    private var picturesAdapter:PicturesPagedListAdapter?=null
+    lateinit var viewModel: PicturesViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel=getViewModel()
+        viewModel = getViewModel()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         observe(viewModel.adapter) {
-            picturesAdapter = it
-            recyclerView?.adapter=it
+            recyclerView?.adapter = it
         }
         observe(viewModel.errors) { exception ->
             when (exception) {
@@ -27,11 +29,6 @@ class PicturesListFragment :BaseFragment() {
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        recyclerView?.adapter=picturesAdapter
     }
 
 }

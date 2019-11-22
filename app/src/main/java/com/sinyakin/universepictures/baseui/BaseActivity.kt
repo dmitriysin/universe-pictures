@@ -1,6 +1,7 @@
 package com.sinyakin.universepictures.baseui
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,6 +17,8 @@ open class BaseActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
+
+    fun isFirstLaunch(savedInstanceState: Bundle?)=savedInstanceState==null
 
 
 

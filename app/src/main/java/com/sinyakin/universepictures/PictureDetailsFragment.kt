@@ -26,11 +26,12 @@ class PictureDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val picture = vm.clickPicture.value
+        val picture = vm.clickedPicture
+
         if (picture != null) {
-            picasso.load(picture.getData()?.url).into(detailImageView, object : Callback {
+            picasso.load(picture.url).into(detailImageView, object : Callback {
                 override fun onSuccess() {
-                    detailExplanation.text = picture.getData()?.explanation
+                    detailExplanation.text = picture.explanation
                 }
 
                 override fun onError(e: Exception?) {

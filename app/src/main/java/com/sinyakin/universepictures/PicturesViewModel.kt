@@ -23,7 +23,9 @@ class PicturesViewModel : ViewModel() {
     lateinit var repository: Repository
 
     val adapter = MutableLiveData<PicturesPagedListAdapter>()
-    val clickPicture = MutableLiveData<Event<PictureData>>()
+    var clickedPicture: PictureData?=null
+    val onClickPicture=MutableLiveData<Event<Unit>>()
+
     private var viewModelComponent: PicturesViewModelComponent?
     private val exceptionLiveData: LiveData<Exception>
     private var exceptionObserver: Observer<Exception>
@@ -48,7 +50,8 @@ class PicturesViewModel : ViewModel() {
         adapter.value = picturesPagedListAdapter.apply {
             submitList(pagedList.getList())
             onItemClickListener = {
-                clickPicture.value = Event(it)
+                clickedPicture=it
+                onClickPicture.value = Event(Unit)
             }
         }
     }

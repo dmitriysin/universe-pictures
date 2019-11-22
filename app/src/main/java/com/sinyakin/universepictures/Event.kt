@@ -1,6 +1,6 @@
 package com.sinyakin.universepictures
 
-class Event<T>(private val content: T?) {
+class Event<T>(private val content: T) {
 
     private var alreadyReturned = false
 
@@ -11,4 +11,5 @@ class Event<T>(private val content: T?) {
             content
         }
     }
+    fun isFirstTimeHandled()=getData()!=null
 }

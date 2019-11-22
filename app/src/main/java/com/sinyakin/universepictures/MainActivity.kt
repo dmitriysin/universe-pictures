@@ -1,6 +1,7 @@
 package com.sinyakin.universepictures
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.lifecycle.ViewModelProviders
 import com.sinyakin.universepictures.baseui.BaseActivity
 import com.sinyakin.universepictures.extensions.observe
@@ -15,10 +16,14 @@ class MainActivity : BaseActivity() {
 
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
 
-        addFragment(PicturesListFragment())
+        if (isFirstLaunch(savedInstanceState)) {
+            addFragment(PicturesListFragment())
+        }
 
-        observe(viewModel.clickPicture) {
-            addFragment(PictureDetailsFragment())
+        observe(viewModel.onClickPicture) {
+            if (it.isFirstTimeHandled()){
+                addFragment(PictureDetailsFragment())
+            }
         }
     }
 }
