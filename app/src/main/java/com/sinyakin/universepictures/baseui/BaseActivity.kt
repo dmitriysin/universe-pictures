@@ -17,17 +17,7 @@ open class BaseActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun notifyUser(text: String, action: (() -> Unit)?=null) {
-        val snackBar =
-            Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_INDEFINITE)
-        action?.let {
-            snackBar.setAction(getString(R.string.refresh)) {
-                action()
-            }
-        }
-        snackBar.setActionTextColor(ContextCompat.getColor(this,R.color.colorWhite))
-        snackBar.show()
-    }
+
 
 
 }

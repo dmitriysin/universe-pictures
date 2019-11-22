@@ -1,11 +1,7 @@
 package com.sinyakin.universepictures
 
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.sinyakin.universepictures.baseui.BaseActivity
 import com.sinyakin.universepictures.extensions.observe
 import com.sinyakin.universepictures.network.ServerError
@@ -19,20 +15,10 @@ class MainActivity : BaseActivity() {
 
         val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
 
-        observe(viewModel.adapter) {
-            recyclerView.adapter = it
-        }
+        addFragment(PicturesListFragment())
 
         observe(viewModel.clickPicture) {
-            addFragment(PictureDetailFragment())
-        }
-
-        observe(viewModel.errors) { exception ->
-            when (exception) {
-                is ServerError -> notifyUser(getString(R.string.server_error)) {
-                    viewModel.retry()
-                }
-            }
+            addFragment(PictureDetailsFragment())
         }
     }
 }

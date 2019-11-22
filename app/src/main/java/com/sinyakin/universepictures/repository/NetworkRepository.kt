@@ -1,9 +1,7 @@
 package com.sinyakin.universepictures.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.sinyakin.universepictures.PictureData
-import com.sinyakin.universepictures.Result
 import com.sinyakin.universepictures.network.ApodApi
 import com.sinyakin.universepictures.network.ServerError
 import javax.inject.Inject

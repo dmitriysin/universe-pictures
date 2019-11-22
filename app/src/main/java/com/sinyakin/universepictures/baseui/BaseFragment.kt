@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.sinyakin.universepictures.App
+import com.sinyakin.universepictures.R
+import kotlin.reflect.KClass
 
 abstract class BaseFragment : Fragment() {
 
@@ -25,4 +29,21 @@ abstract class BaseFragment : Fragment() {
     ): View? {
         return inflater.inflate(layoutId(), container, false)
     }
+
+    fun notifyUser(text: String, action: (() -> Unit)? = null) {
+        view?.let { view ->
+            val snackBar =
+                Snackbar.make(view, text, Snackbar.LENGTH_INDEFINITE)
+            action?.let {
+                snackBar.setAction(getString(R.string.refresh)) {
+                    action()
+                }
+            }
+            context?.let { context ->
+                snackBar.setActionTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+            }
+            snackBar.show()
+        }
+    }
+
 }
