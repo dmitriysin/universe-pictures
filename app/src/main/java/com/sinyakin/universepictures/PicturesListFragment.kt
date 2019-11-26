@@ -5,10 +5,10 @@ import android.view.View
 import com.sinyakin.universepictures.baseui.BaseFragment
 import com.sinyakin.universepictures.extensions.observe
 import com.sinyakin.universepictures.network.ServerError
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.pictures_list.*
 
 class PicturesListFragment : BaseFragment() {
-    override fun layoutId() = R.layout.main_activity
+    override fun layoutId() = R.layout.pictures_list
 
     lateinit var viewModel: PicturesViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
