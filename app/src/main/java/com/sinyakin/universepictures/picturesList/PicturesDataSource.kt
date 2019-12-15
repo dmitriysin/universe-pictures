@@ -10,11 +10,10 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @PicturesViewModelScope
-class PicturesDataSource @Inject constructor(
+open class PicturesDataSource @Inject constructor(
     private val viewModelCoroutineScope: CoroutineScope,
     private val repository: Repository,
-    private val dateManager: DateManager,
-    private val picasso: Picasso
+    private val dateManager: DateManager
 ) : PositionalDataSource<PictureData>() {
 
     private var endDate = dateManager.getCurrentDate()
@@ -43,24 +42,16 @@ class PicturesDataSource @Inject constructor(
         loadParams = LoadParams.Range(params, callback)
     }
 
-
     private suspend fun loadPictures(loadSize: Int): List<PictureData>? =
         withContext(Dispatchers.IO) {
             val startDate = dateManager.addDaysToDate(endDate, -loadSize)
             val pictures = repository.getPictures(startDate, endDate)
-            viewModelCoroutineScope.launch { cachePictures(pictures) }
             pictures?.let {
                 val lastLoadedDate = pictures[pictures.lastIndex].date
                 endDate = dateManager.addDaysToDate(lastLoadedDate, -1)
             }
             return@withContext pictures
         }
-
-    private fun cachePictures(pictures: List<PictureData>?) {
-        pictures?.forEach {
-            picasso.load(it.url).fetch()
-        }
-    }
 
     fun retryLoadPictures() {
         when (loadParams) {
@@ -76,5 +67,4 @@ class PicturesDataSource @Inject constructor(
     companion object {
         const val START_FROM_FIRST_POSITION = 0
     }
-
 }

@@ -19,7 +19,7 @@ class PictureDetailsFragment : BaseFragment() {
     private lateinit var vm: PicturesViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
+        appComponent?.inject(this)
         vm = getViewModel()
     }
 

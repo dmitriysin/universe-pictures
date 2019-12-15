@@ -1,3 +1,3 @@
 package com.sinyakin.universepictures.network
 
-class ServerError : Exception()
+class ServerError(private val explanation:String?=null) : Exception(explanation)

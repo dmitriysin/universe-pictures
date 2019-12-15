@@ -8,10 +8,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NetworkRepository @Inject constructor(private val apodApi: ApodApi) :
-    Repository {
+class NetworkRepository @Inject constructor(
+    private val apodApi: ApodApi
+) : Repository {
 
     var errors = MutableLiveData<Exception>()
+    val serverError by lazy { ServerError() }
 
     override fun getErrorStream(): MutableLiveData<Exception> {
         return errors
@@ -20,9 +22,10 @@ class NetworkRepository @Inject constructor(private val apodApi: ApodApi) :
     override suspend fun getPictures(starDate: String, endDate: String): List<PictureData>? {
         return try {
             val mediaData = apodApi.getMediaData(starDate, endDate).asReversed()
-            mediaData.filter { it.media_type == IMAGE }
+            val pictures = mediaData.filter { it.media_type == IMAGE }
+            pictures
         } catch (e: Exception) {
-            errors.postValue(ServerError())
+            errors.postValue(serverError)
             e.printStackTrace()
             null
         }

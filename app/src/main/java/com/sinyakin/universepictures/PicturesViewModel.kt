@@ -1,9 +1,9 @@
 package com.sinyakin.universepictures
 
-import androidx.lifecycle.*
-import com.sinyakin.universepictures.di.DaggerPicturesViewModelComponent
-import com.sinyakin.universepictures.di.PicturesViewModelComponent
-import com.sinyakin.universepictures.di.PicturesViewModelModule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import com.sinyakin.universepictures.network.ServerError
 import com.sinyakin.universepictures.picturesList.PagedList
 import com.sinyakin.universepictures.picturesList.PicturesDataSource
@@ -22,51 +22,58 @@ class PicturesViewModel : ViewModel() {
     @Inject
     lateinit var repository: Repository
 
-    val adapter = MutableLiveData<PicturesPagedListAdapter>()
-    var clickedPicture: PictureData?=null
-    val onClickPicture=MutableLiveData<Event<Unit>>()
+    private var componentInjector: PicturesViewModelComponentInjector? = null
 
-    private var viewModelComponent: PicturesViewModelComponent?
-    private val exceptionLiveData: LiveData<Exception>
-    private var exceptionObserver: Observer<Exception>
+    val adapter = MutableLiveData<PicturesPagedListAdapter>()
+    var clickedPicture: PictureData? = null
+    val onClickPicture = MutableLiveData<Event<Unit>>()
+
+    private var exceptionLiveData: LiveData<Exception>? = null
+    private var exceptionObserver: Observer<Exception>? = null
     val errors = MutableLiveData<Exception>()
 
-
     init {
-        viewModelComponent = getPictureViewModelComponent()
-        viewModelComponent?.inject(this)
-        loadPictures()
+        componentInjector = PicturesViewModelComponentInjector()
+        componentInjector?.inject(this)
+    }
+
+
+
+    fun initPicturesAdapter() {
+        adapter.value = picturesPagedListAdapter.apply {
+            val pl = pagedList.getList()
+            submitList(pl)
+            onItemClickListener = {
+                clickedPicture = it
+                onClickPicture.value = Event(Unit)
+            }
+        }
+    }
+
+    fun retry() {
+        picturesDataSource.retryLoadPictures()
+    }
+
+    fun observeRepositoryExceptions() {
         exceptionObserver = Observer { exception ->
             when (exception) {
                 is ServerError -> errors.value = exception
             }
         }
         exceptionLiveData = repository.getErrorStream()
-        exceptionLiveData.observeForever(exceptionObserver)
-
+        exceptionLiveData?.observeForever(exceptionObserver!!)
     }
 
-    private fun loadPictures() {
-        adapter.value = picturesPagedListAdapter.apply {
-            submitList(pagedList.getList())
-            onItemClickListener = {
-                clickedPicture=it
-                onClickPicture.value = Event(Unit)
-            }
+    private fun unsubscribeFromRepositoryExceptions() {
+        exceptionObserver?.let {
+            exceptionLiveData?.removeObserver(it)
         }
     }
 
-    private fun getPictureViewModelComponent() = DaggerPicturesViewModelComponent.builder()
-        .picturesViewModelModule(PicturesViewModelModule(viewModelScope))
-        .applicationComponent(App.instance.daggerApplicationComponent).build()
-
     override fun onCleared() {
         super.onCleared()
-        viewModelComponent = null
-        exceptionLiveData.removeObserver(exceptionObserver)
+        componentInjector = null
+        unsubscribeFromRepositoryExceptions()
     }
 
-    fun retry() {
-        picturesDataSource.retryLoadPictures()
-    }
 }

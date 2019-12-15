@@ -14,6 +14,7 @@ class PicturesListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = getViewModel()
+        viewModel.initPicturesAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

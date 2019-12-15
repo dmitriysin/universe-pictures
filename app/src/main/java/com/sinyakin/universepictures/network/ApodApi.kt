@@ -9,6 +9,7 @@ interface ApodApi {
     /**
      * start_date<end_date
      */
+    @Throws(Exception::class)
     @GET(ENDPOINT)
     suspend fun getMediaData(
         @Query("start_date") startDate: String,

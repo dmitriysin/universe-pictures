@@ -20,7 +20,7 @@ abstract class BaseFragment : Fragment() {
     inline fun <reified T : ViewModel> getViewModel() =
         ViewModelProviders.of(requireActivity()).get(T::class.java)
 
-    val appComponent = App.instance.daggerApplicationComponent
+    val appComponent = App.instance?.daggerApplicationComponent
 
     override fun onCreateView(
         inflater: LayoutInflater,
