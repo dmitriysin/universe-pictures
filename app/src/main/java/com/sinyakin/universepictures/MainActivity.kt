@@ -1,7 +1,7 @@
 package com.sinyakin.universepictures
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.sinyakin.universepictures.baseui.BaseActivity
 import com.sinyakin.universepictures.extensions.observe
 
@@ -11,7 +11,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        val viewModel = ViewModelProviders.of(this).get(PicturesViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(PicturesViewModel::class.java)
 
         viewModel.observeRepositoryExceptions()
 

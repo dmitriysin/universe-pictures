@@ -17,10 +17,5 @@ open class BaseActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
-
     fun isFirstLaunch(savedInstanceState: Bundle?)=savedInstanceState==null
-
-
-
-
 }

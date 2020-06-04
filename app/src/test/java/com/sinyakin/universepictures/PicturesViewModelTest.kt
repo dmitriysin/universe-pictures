@@ -2,7 +2,7 @@ package com.sinyakin.universepictures
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.sinyakin.universepictures.network.ApodApi
 import com.sinyakin.universepictures.network.ServerError
 import com.sinyakin.universepictures.picturesList.PicturesDataSource
@@ -44,7 +44,7 @@ class PicturesViewModelTest : AndroidTest() {
         networkRepository = Mockito.spy(NetworkRepository(apodApi))
         activity = Robolectric.buildActivity(FragmentActivity::class.java).setup()
         picturesViewModel =
-            ViewModelProviders.of(activity.get()).get(PicturesViewModel::class.java).apply {
+            ViewModelProvider(activity.get()).get(PicturesViewModel::class.java).apply {
                 repository = networkRepository
                 picturesPagedListAdapter = picturesPagedListAdapterTest
                 picturesDataSource = picturesDataSourceTest
